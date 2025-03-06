@@ -21,27 +21,27 @@ goto END         // Jump to END
 (NEGATIVE)
 // Handle negative case
 push argument 0  // Push x onto the stack
-neg              // Compute -x
-pop argument 1   // Store -x in argument[1] (z = -x)
-push constant 1  // Push 1 onto the stack
-pop argument 2   // Set argument[2] = 1 (x is negative)
-
-// Check if absolute value can be computed
-push argument 0  // Push x onto the stack
 push constant -32768 // Push -32768 (smallest 16-bit number)
 eq               // Check if x == -32768
 if-goto INVALID  // If x == -32768, jump to INVALID
 
-// Absolute value can be computed
+// Compute absolute value
+push argument 0  // Push x onto the stack
+neg              // Compute -x
+pop argument 1   // Store -x in argument[1] (z = -x)
+push constant 1  // Push 1 onto the stack
+pop argument 2   // Set argument[2] = 1 (x is negative)
 push constant 0  // Push 0 onto the stack
-pop argument 3   // Set argument[3] = 0
+pop argument 3   // Set argument[3] = 0 (absolute value can be computed)
 goto END         // Jump to END
 
 (INVALID)
-// Absolute value cannot be computed
-push constant 1  // Push 1 onto the stack
-pop argument 3   // Set argument[3] = 1
+// Handle invalid case (x == -32768)
 push argument 0  // Push x onto the stack
 pop argument 1   // Store x in argument[1] (z = x)
+push constant 1  // Push 1 onto the stack
+pop argument 2   // Set argument[2] = 1 (x is negative)
+push constant 1  // Push 1 onto the stack
+pop argument 3   // Set argument[3] = 1 (absolute value cannot be computed)
 
 (END)
