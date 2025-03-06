@@ -1,0 +1,47 @@
+// AbsoluteValue.vm
+// Computes z = |x|, where x is in argument[0].
+// Stores the result z in argument[1].
+// Sets argument[2] to 1 if x is negative, otherwise 0.
+// Sets argument[3] to 1 if the absolute value cannot be computed, otherwise 0.
+
+push argument 0  // Push x onto the stack
+push constant 0  // Push 0 onto the stack
+lt               // Check if x < 0
+if-goto NEGATIVE // If x < 0, jump to NEGATIVE
+
+// Handle non-negative case
+push argument 0  // Push x onto the stack
+pop argument 1   // Store x in argument[1] (z = x)
+push constant 0  // Push 0 onto the stack
+pop argument 2   // Set argument[2] = 0 (x is not negative)
+push constant 0  // Push 0 onto the stack
+pop argument 3   // Set argument[3] = 0 (absolute value can be computed)
+goto END         // Jump to END
+
+(NEGATIVE)
+// Handle negative case
+push argument 0  // Push x onto the stack
+neg              // Compute -x
+pop argument 1   // Store -x in argument[1] (z = -x)
+push constant 1  // Push 1 onto the stack
+pop argument 2   // Set argument[2] = 1 (x is negative)
+
+// Check if absolute value can be computed
+push argument 0  // Push x onto the stack
+push constant -32768 // Push -32768 (smallest 16-bit number)
+eq               // Check if x == -32768
+if-goto INVALID  // If x == -32768, jump to INVALID
+
+// Absolute value can be computed
+push constant 0  // Push 0 onto the stack
+pop argument 3   // Set argument[3] = 0
+goto END         // Jump to END
+
+(INVALID)
+// Absolute value cannot be computed
+push constant 1  // Push 1 onto the stack
+pop argument 3   // Set argument[3] = 1
+push argument 0  // Push x onto the stack
+pop argument 1   // Store x in argument[1] (z = x)
+
+(END)
