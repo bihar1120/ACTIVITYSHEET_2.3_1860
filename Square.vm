@@ -4,5 +4,5 @@
 
 push argument 0  // Push x onto the stack
 push argument 0  // Push x onto the stack again
-mult             // Compute x * x = x²
+call Math.multiply 2 // Compute x * x = x²
 pop argument 1   // Store the result in argument[1]
