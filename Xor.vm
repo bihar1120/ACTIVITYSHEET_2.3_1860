@@ -1,0 +1,13 @@
+// Xor.vm
+// Computes z = x XOR y, where x is in argument[0] and y is in argument[1].
+// Stores the result z in argument[2].
+
+push argument 0  // Push x onto the stack
+push argument 1  // Push y onto the stack
+and              // Compute x AND y
+not              // Compute NOT (x AND y)
+push argument 0  // Push x onto the stack
+push argument 1  // Push y onto the stack
+or               // Compute x OR y
+and              // Compute (x OR y) AND NOT (x AND y) = x XOR y
+pop argument 2   // Store the result in argument[2]
