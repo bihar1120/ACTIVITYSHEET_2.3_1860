@@ -1,47 +1,69 @@
-// AbsoluteValue.vm
-// Computes z = |x|, where x is in argument[0].
-// Stores the result z in argument[1].
-// Sets argument[2] to 1 if x is negative, otherwise 0.
-// Sets argument[3] to 1 if the absolute value cannot be computed, otherwise 0.
+// Computes z = |x|, where x is the value initially stored in argument[0]
+// Stores the result z in argument[1]
+// Sets argument[2] to 1 if x is negative, 0 otherwise
+// Sets argument[3] to 1 if the absolute value cannot be computed, 0 otherwise
+// The value in argument[0] must not be modified
 
-push argument 0  // Push x onto the stack
-push constant 0  // Push 0 onto the stack
-lt               // Check if x < 0
-if-goto NEGATIVE // If x < 0, jump to NEGATIVE
+// Push x onto the stack
+push argument 0
 
-// Handle non-negative case
-push argument 0  // Push x onto the stack
-pop argument 1   // Store x in argument[1] (z = x)
-push constant 0  // Push 0 onto the stack
-pop argument 2   // Set argument[2] = 0 (x is not negative)
-push constant 0  // Push 0 onto the stack
-pop argument 3   // Set argument[3] = 0 (absolute value can be computed)
-goto END         // Jump to END
+// First, check if x is negative
+push constant 0
+gt          // Check if 0 > x (i.e., if x is negative)
+if-goto NEGATIVE_X
+    // If we get here, x is non-negative (zero or positive)
+    
+    // Store 0 in argument[2] since x is not negative
+    push constant 0
+    pop argument 2
+    
+    // Store the original value as the absolute value in argument[1]
+    push argument 0
+    pop argument 1
+    
+    // Set argument[3] to 0 since the absolute value can be computed
+    push constant 0
+    pop argument 3
+    
+    goto END
 
-(NEGATIVE)
-// Handle negative case
-push argument 0  // Push x onto the stack
-push constant -32768 // Push -32768 (smallest 16-bit number)
-eq               // Check if x == -32768
-if-goto INVALID  // If x == -32768, jump to INVALID
+label NEGATIVE_X
+    // If we get here, x is negative
+    
+    // Store 1 in argument[2] since x is negative
+    push constant 1
+    pop argument 2
+    
+    // Check for potential overflow: if x is the minimum representable value
+    // For a 16-bit 2's complement system, this would be -32768
+    push argument 0
+    push constant 32768
+    neg
+    eq
+    if-goto OVERFLOW_CASE
+    
+    // If not the minimum value, compute |x| = -x
+    push argument 0
+    neg
+    pop argument 1
+    
+    // Set argument[3] to 0 since the absolute value can be computed
+    push constant 0
+    pop argument 3
+    
+    goto END
+    
+label OVERFLOW_CASE
+    // For the special case of minimum value (-32768), we cannot represent +32768
+    // in 16-bit 2's complement
 
-// Compute absolute value
-push argument 0  // Push x onto the stack
-neg              // Compute -x
-pop argument 1   // Store -x in argument[1] (z = -x)
-push constant 1  // Push 1 onto the stack
-pop argument 2   // Set argument[2] = 1 (x is negative)
-push constant 0  // Push 0 onto the stack
-pop argument 3   // Set argument[3] = 0 (absolute value can be computed)
-goto END         // Jump to END
-
-(INVALID)
-// Handle invalid case (x == -32768)
-push argument 0  // Push x onto the stack
-pop argument 1   // Store x in argument[1] (z = x)
-push constant 1  // Push 1 onto the stack
-pop argument 2   // Set argument[2] = 1 (x is negative)
-push constant 1  // Push 1 onto the stack
-pop argument 3   // Set argument[3] = 1 (absolute value cannot be computed)
-
-(END)
+    // Store the original value in argument[1]
+    // (or you could set it to the max value 32767 as an approximation)
+    push argument 0
+    pop argument 1
+    
+    // Set argument[3] to 1 since the absolute value cannot be computed exactly
+    push constant 1
+    pop argument 3
+    
+label END
