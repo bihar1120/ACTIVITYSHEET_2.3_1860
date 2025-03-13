@@ -26,9 +26,9 @@ function Math.multiply 0
 // Test case: Compute x² (x * x)
 // --------------------------------------
 // Start the main function
-function Main 0  
-    push constant 3  // x = 3
-    push constant 3  // y = 3 (to compute 3 * 3)
-    call Math.multiply 2  // Compute 3 * 3
-    pop argument 1  // Store the result in argument[1]
-    return
+
+    push argument 0 // 
+    push argument 0 //
+    call Math.multiply 2  // 
+      
+    
