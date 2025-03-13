@@ -2,7 +2,7 @@
 // Computes x * y using repeated addition
 // Assumes x and y are passed at the top of the stack
 // Returns the result on the stack
-function Math.multiply 0
+function Square.multiply 1
     push constant 0  // result = 0
     pop local 0      // Store result in local variable 0
     label LOOP
@@ -29,6 +29,6 @@ function Math.multiply 0
 
     push argument 0 // 
     push argument 0 //
-    call Math.multiply 2  // 
+    call Square.multiply  2  // 
       
     
