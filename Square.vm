@@ -1,6 +1,37 @@
 // Square.vm
 // Computes y = x², where x is in argument[0].
 // Leaves the result y at the bottom of the stack and stores it in argument[1].
+// Function: multiply(x, y)
+// Computes x * y using repeated addition
+// Assumes x and y are passed at the top of the stack
+// Returns the result on the stack
+
+function Math.multiply 0
+    push constant 0  // result = 0
+    pop local 0      // Store result in local variable 0
+
+    label LOOP
+    push argument 1  // Load y
+    if-goto CONTINUE // If y > 0, continue loop
+    goto END         // Else, exit
+
+    label CONTINUE
+    push local 0     // Load result
+    push argument 0  // Load x
+    add              // result = result + x
+    pop local 0      // Store result back
+
+    push argument 1  // Load y
+    push constant 1
+    sub              // y = y - 1
+    pop argument 1   // Store updated y
+
+    goto LOOP        // Repeat
+
+    label END
+    push local 0     // Push result to stack
+    return
+
 
 push argument 0  // Push x onto the stack
 push argument 0  // Push x onto the stack again
