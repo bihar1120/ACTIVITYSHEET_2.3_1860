@@ -1,7 +1,4 @@
-// Square.vm
-// Computes y = x², where x is in argument[0].
-// Leaves the result y at the bottom of the stack and stores it in argument[1].
-// Function: multiply(x, y)
+// Function: Math.multiply(x, y)
 // Computes x * y using repeated addition
 // Assumes x and y are passed at the top of the stack
 // Returns the result on the stack
@@ -32,8 +29,14 @@ function Math.multiply 0
     push local 0     // Push result to stack
     return
 
+// --------------------------------------
+// Test case: Compute x² (x * x)
+// --------------------------------------
 
-push argument 0  // Push x onto the stack
-push argument 0  // Push x onto the stack again
-call Math.multiply 2 // Compute x * x = x²
-pop argument 1   // Store the result in argument[1]
+// Start the main function
+function Main 0  
+    push constant 3  // x = 3
+    push constant 3  // y = 3 (to compute 3 * 3)
+    call Math.multiply 2  // Compute 3 * 3
+    pop argument 1  // Store the result in argument[1]
+    return
